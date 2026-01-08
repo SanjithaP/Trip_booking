@@ -1,70 +1,184 @@
-# Getting Started with Create React App
+# Trip Package Booking System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application for booking travel packages. Users can browse available trips, check availability, make bookings, and manage their reservations.
 
-## Available Scripts
+## Tech Stack
 
-In the project directory, you can run:
+**Frontend:**
+- React 18.3.1
+- React Router DOM 6.26.1
+- Axios for API calls
 
-### `npm start`
+**Backend:**
+- Node.js with Express.js 4.21.1
+- MongoDB with Mongoose 8.7.1
+- CORS enabled
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Browse all available travel packages
+- Search packages by location or name
+- View detailed package information
+- Make bookings with date selection
+- View booking history
+- Cancel bookings
+- Input validation on both client and server side
 
-### `npm test`
+## Project Structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+trip-booking/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── App.js
+│   └── package.json
+└── backend/
+    ├── models/
+    │   └── Place.js
+    ├── routes/
+    │   └── places.js
+    ├── Server.js
+    └── package.json
+```
 
-### `npm run build`
+## Database Schema
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Place/Package Model
+```javascript
+{
+  name: String (required)
+  location: String (required)
+  description: String (required)
+  bestTimeToVisit: String (required)
+  imageUrl: String (optional)
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## API Endpoints
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/places | Get all packages |
+| GET | /api/places/:id | Get specific package |
+| POST | /api/places | Create new package |
+| PUT | /api/places/:id | Update package |
+| DELETE | /api/places/:id | Delete package |
 
-### `npm run eject`
+## Installation and Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB installed and running locally
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Backend Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Navigate to backend directory:
+```bash
+cd backend
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Learn More
+3. Start MongoDB service:
+```bash
+mongod
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. Run the server:
+```bash
+node Server.js
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Server will start on http://localhost:3000
 
-### Code Splitting
+### Frontend Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. Navigate to frontend directory:
+```bash
+cd frontend
+```
 
-### Analyzing the Bundle Size
+2. Install dependencies:
+```bash
+npm install
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+3. Start the React app:
+```bash
+npm start
+```
 
-### Making a Progressive Web App
+App will open on http://localhost:3000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## How It Works
 
-### Advanced Configuration
+### Booking Flow
+1. User browses available packages on the homepage
+2. Clicks on a package to view details
+3. Selects travel dates and number of travelers
+4. System checks for conflicts and availability
+5. Creates booking if validation passes
+6. User receives confirmation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Validation Logic
+- Required fields are checked before submission
+- Date validation ensures travel dates are in the future
+- Prevents duplicate bookings for same user/package/date
+- Capacity checks ensure package isn't overbooked
 
-### Deployment
+## Key Implementation Details
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Preventing Double Bookings
+The system checks for existing bookings with the same user, package, and travel dates before creating a new booking. This is handled at the application level using database queries.
 
-### `npm run build` fails to minify
+### Error Handling
+- Try-catch blocks around all async operations
+- Meaningful error messages returned to frontend
+- Proper HTTP status codes (200, 201, 400, 404, 500)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### CORS Configuration
+CORS is enabled to allow the React frontend to communicate with the Express backend during development.
+
+## Future Enhancements
+
+- User authentication with JWT
+- Payment gateway integration
+- Email notifications for booking confirmations
+- Admin dashboard for package management
+- Reviews and ratings system
+- Advanced search filters (price range, duration)
+- Booking modification functionality
+- Image upload for packages
+
+## Known Issues
+
+- Currently using basic MongoDB schema, could be expanded for production
+- No authentication implemented yet
+- Date conflict checking is simple, needs more robust logic for production
+- Images are stored as URLs, not uploaded to server
+
+## Learning Outcomes
+
+Through this project, I learned:
+- Building RESTful APIs with Express.js
+- Working with MongoDB and Mongoose ODM
+- React component lifecycle and hooks
+- API integration in React
+- Error handling in full-stack applications
+- Database schema design
+- CORS and cross-origin requests
+
+## Development Notes
+
+This was built as a learning project to understand full-stack development concepts. The focus was on implementing core booking functionality and understanding how frontend and backend communicate through REST APIs.
+
+The project demonstrates CRUD operations, data validation, and basic business logic for a booking system. In a production environment, additional features like authentication, payment processing, and more sophisticated availability checking would be necessary.
+
+## License
+
+This project is for educational purposes.
